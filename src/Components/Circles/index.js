@@ -47,7 +47,13 @@ const Circles = () => {
     setRipplePosition(null); // to make double animation
     setActiveCircle(index);
     setTimeout(() => {
-      const position = { x: event.target.clientX, y: event.target.clientY };
+      const circle = circleRefs[index]?.current;
+      const rect = circle?.getBoundingClientRect();
+
+      const position = {
+        x: rect?.width / 2, // Center of the element
+        y: rect?.height / 2,
+      };
       setRipplePosition(position);
     }, 10);
   };
@@ -64,7 +70,7 @@ const Circles = () => {
   };
 
   const handlePlayerChange = () => {
-    const timer = isUserTurn ? 1000 : memorySequence.length * 800;
+    const timer = isUserTurn ? 1000 : memorySequence?.length * 800;
     setTimeout(() => {
       setIsUserTurn(!isUserTurn);
     }, timer);
@@ -126,7 +132,9 @@ const Circles = () => {
     const tempSeq = [...memorySequence];
     tempSeq.pop();
 
-    const areSequencesEqual = userSequence.every((val, i) => val === tempSeq[i]);
+    const areSequencesEqual = userSequence.every(
+      (val, i) => val === tempSeq[i]
+    );
 
     if (tempSeq.length === userSequence.length && areSequencesEqual) {
       playCircleSound(activeCircle);
